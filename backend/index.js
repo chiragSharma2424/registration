@@ -10,6 +10,14 @@ app.use(express.json());
 app.use(cors());
 
 
+function connectsDatabase() {
+    mongoose.connect(process.env.MONGO_URI).then(() => {
+        console.log("database connected");
+    }).catch((err) => {
+        console.log(`error in db connection ${err}`);
+    })
+}
+
 
 const userSchema = new mongoose.Schema({
     name: {type: String, required: true},
@@ -62,6 +70,8 @@ app.get('/', (req, res) => {
         message: "this is home route"
     })
 });
+
+connectsDatabase();
 
 app.listen(port, () => {
     console.log(`server started on http://localhost:${port}`);
