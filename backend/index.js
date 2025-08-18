@@ -10,14 +10,13 @@ app.use(express.json());
 app.use(cors());
 
 
-function connectsDatabase() {
+function connectDB () {
     mongoose.connect(process.env.MONGO_URI).then(() => {
         console.log("database connected");
     }).catch((err) => {
         console.log(`error in db connection ${err}`);
     })
 }
-
 
 const userSchema = new mongoose.Schema({
     name: {type: String, required: true},
@@ -30,7 +29,7 @@ const User = mongoose.model("user", userSchema);
 
 app.post('/api/signup', async (req, res) => {
     try {
-        const { name, email, password }= req.body;
+        const { name, email, password } = req.body;
         if(!name || !email || !password) {
             return res.status(400).json({
                 message: "All fields are required"
@@ -71,7 +70,7 @@ app.get('/', (req, res) => {
     })
 });
 
-connectsDatabase();
+connectDB();
 
 app.listen(port, () => {
     console.log(`server started on http://localhost:${port}`);
