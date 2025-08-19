@@ -14,5 +14,10 @@ button.addEventListener('click', function() {
             email: email,
             password: password
         })
+    }).then((resp) => {
+        return resp.json();
+    }).then((data) => {
+        console.log(data);
+        console.log(data.toke);
     })
 })
