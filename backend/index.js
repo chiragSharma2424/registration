@@ -19,7 +19,7 @@ function connectDB () {
 }
 
 const userSchema = new mongoose.Schema({
-    name: {type: String, required: true},
+    firstName: {type: String, required: true},
     email: {type: String, required: true, trim: true},
     password: {type: String, required: true}
 }, {timestamps: true});
@@ -29,8 +29,8 @@ const User = mongoose.model("user", userSchema);
 
 app.post('/api/signup', async (req, res) => {
     try {
-        const { name, email, password } = req.body;
-        if(!name || !email || !password) {
+        const { firstName, email, password } = req.body;
+        if(!firstName || !email || !password) {
             return res.status(400).json({
                 message: "All fields are required"
             })
@@ -44,12 +44,13 @@ app.post('/api/signup', async (req, res) => {
         }
 
         const newUser = await User.create({
-            name: name,
+            firstName: firstName,
             email: email,
             password: password
         });
 
-        const token = jwt.sign({ name, email, password }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ firstName, email, password }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        console.log(token);
 
         return res.status(200).json({
             message: "user signup successfully",
